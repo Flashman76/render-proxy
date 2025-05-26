@@ -1,29 +1,29 @@
-const express = require('express');
-const axios = require('axios');
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
+
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
-});
+app.use(cors());
 
-app.get('/proxy', async (req, res) => {
+app.get("/proxy", async (req, res) => {
   const targetUrl = req.query.url;
-  if (!targetUrl) return res.status(400).send('Missing url');
+  if (!targetUrl) return res.status(400).send("Missing url");
 
   try {
     const response = await axios.get(targetUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0'
+        "User-Agent": "Mozilla/5.0"
       }
     });
     res.send(response.data);
   } catch (error) {
-    res.status(500).send('Failed to fetch: ' + error.message);
+    res.status(500).send("Failed to fetch: " + error.message);
   }
 });
 
-app.listen(port, () => {
-  console.log(`Proxyserver kör på port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
